@@ -1,33 +1,37 @@
-import 'react-native-gesture-handler';
-import React, { useEffect, useState } from 'react'
-import { NavigationContainer } from '@react-navigation/native'
-import { createStackNavigator } from '@react-navigation/stack'
-import { LoginScreen, HomeScreen, RegistrationScreen } from './src/screens'
-import {decode, encode} from 'base-64'
-if (!global.btoa) {  global.btoa = encode }
-if (!global.atob) { global.atob = decode }
+import React, { useState, useEffect, useContext } from 'react';
+import * as Font from 'expo-font';
+import { AppLoading } from 'expo';
+import ScreenRoutes from "./src/app/components/screens/screenRoutes";
 
-const Stack = createStackNavigator();
+function useFonts(fontMap) {
+  let [fontsLoaded, setFontsLoaded] = useState(false);
+  (async () => {
+    await Font.loadAsync(fontMap);
+    setFontsLoaded(true);
+  })();
+  return [fontsLoaded];
+}
 
-export default function App() {
-
-  const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState(null)
-
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        { user ? (
-          <Stack.Screen name="Home">
-            {props => <HomeScreen {...props} extraData={user} />}
-          </Stack.Screen>
-        ) : (
-          <>
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Registration" component={RegistrationScreen} />
-          </>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+export default function Home() {
+  let [fontsLoaded] = useFonts({
+    'SpartanBlack': require('./assets/fonts/spartanFonts/Spartan-Black.ttf'),
+    'SpartanBold':require('./assets/fonts/spartanFonts/Spartan-Bold.ttf'),
+    'SpartanExtraBold': require('./assets/fonts/spartanFonts/Spartan-ExtraBold.ttf'),
+    'SpartanExtraLight': require('./assets/fonts/spartanFonts/Spartan-ExtraLight.ttf'),
+    'SpartanLight': require('./assets/fonts/spartanFonts/Spartan-Light.ttf'),
+    'SpartanMedium': require('./assets/fonts/spartanFonts/Spartan-Medium.ttf'),
+    'SpartanRegular': require('./assets/fonts/spartanFonts/Spartan-Regular.ttf'),
+    'SpartanSemiBold': require('./assets/fonts/spartanFonts/Spartan-SemiBold.ttf'),
+    'SpartanThin': require('./assets/fonts/spartanFonts/Spartan-Thin.ttf')
+  });
+    
+      if (fontsLoaded) {
+        return  (
+            <ScreenRoutes />
+        );        
+      } else {
+        return (
+            <AppLoading />
+        )
+      }
 }

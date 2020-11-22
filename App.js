@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import * as Font from 'expo-font';
 import { AppLoading } from 'expo';
+import { AuthProvider } from './src/app/components/screens/authScreens/authContext'
 import ScreenRoutes from "./src/app/components/screens/screenRoutes";
 
 function useFonts(fontMap) {
@@ -27,7 +28,9 @@ export default function Home() {
     
       if (fontsLoaded) {
         return  (
+          <AuthProvider>
             <ScreenRoutes />
+          </AuthProvider>
         );        
       } else {
         return (

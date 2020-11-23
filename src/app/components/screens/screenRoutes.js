@@ -7,7 +7,8 @@ import {
   LoginScreen, 
   HomeScreen, 
   RegistrationScreen,
-  UpdateUserScreen
+  UpdateUserScreen,
+  ResetPasswordScreen
 } from './index.js'
 import{ useAuth } from './authScreens/authContext'
 import {decode, encode} from 'base-64'
@@ -46,6 +47,11 @@ export default function App() {
               name="Registration" 
               options={{ headerShown: false }}
               component={RegistrationScreen} 
+            />
+            <Stack.Screen 
+              name="Reset Password" 
+              options={{ headerShown: false }}
+              component={ResetPasswordScreen} 
             />
             </>)
         }

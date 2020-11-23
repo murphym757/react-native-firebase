@@ -1,6 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { firebase } from '../../../../server/config/config'
 import { auth } from '../../../../server/config/config'
+import {
+    CustomFailureAlert,
+    CustomFailureAlertFont,
+    CustomSuccessAlert,
+    CustomSuccessAlertFont
+  } from '../../../../../assets/styles/authScreensStyling';
 
 const AuthContext = React.createContext()
 
@@ -26,6 +32,30 @@ export function AuthProvider({ children }) {
         return firebase.auth().signOut()
     }
 
+    function resetPassword(email) {
+        return firebase.auth().sendPasswordResetEmail(email)
+    }
+
+    function updateEmail(email) {
+        return currentUser.updateEmail(email)
+    }
+    
+    function updatePassword(password) {
+        return currentUser.updatePassword(password)
+    }
+
+    function successAlert(message) {
+        return <CustomSuccessAlert>
+        <CustomSuccessAlertFont>{message}</CustomSuccessAlertFont>
+      </CustomSuccessAlert>
+    }
+
+    function failureAlert(error) {
+        return <CustomFailureAlert>
+        <CustomFailureAlertFont>{error}</CustomFailureAlertFont>
+      </CustomFailureAlert>
+    }
+
     useEffect(() => {
         const unsubcribe = firebase.auth().onAuthStateChanged(user => {
             setCurrentUser(user)
@@ -39,7 +69,12 @@ export function AuthProvider({ children }) {
         currentUser,
         signUp,
         logIn,
-        logOut
+        logOut,
+        resetPassword,
+        updateEmail,
+        updatePassword,
+        successAlert,
+        failureAlert
     }
 
     return (

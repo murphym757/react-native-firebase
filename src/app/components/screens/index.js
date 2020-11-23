@@ -2,6 +2,8 @@
     // Auth Screens
     export { default as LoginScreen } from './authScreens/loginScreen'
     export { default as RegistrationScreen } from './authScreens/registrationScreen'
+    export { default as ResetPasswordScreen } from './authScreens/resetPasswordScreen' 
+
 
     // Main Screens
     export { default as HomeScreen } from './mainScreens/homeScreen'

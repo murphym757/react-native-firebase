@@ -7,6 +7,8 @@ import { firebase } from '../../../../server/config/config';
 import { manualColorSet, loadingScreen } from './loadingScreen' //Loader
 // App Styling
 import {
+    FormHeadingFontContainer,
+    FormHeadingFont,
     CustomInputField,
     TouchableButton,
     TouchableButtonFont,
@@ -18,57 +20,38 @@ import {
 //FontAwesome
 import { FontAwesomeIcon, faTimes } from '../index'
 
-export default function LoginScreen({navigation}) {
-    const { logIn, successAlert, failureAlert } = useAuth()
+export default function ResetPasswordScreen({navigation}) {
+    const { resetPassword, successAlert, failureAlert } = useAuth()
     const db = firebase.firestore()
     const [ isLoading, setIsLoading] = useState(true)
     const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [message, setMessage] = useState('')
+    const [message, setMessage] = useState('Forgotten your password? Enter your e-mail address below, and we\'ll send you an e-mail allowing you to reset it.')
     const [error, setError] = useState('')
     const appIcon = '../../../../../assets/images/icon.png'
 
-    function onFooterRegsLinkPress() {
-        navigation.navigate('Registration')
+    function onFooterLinkPress() {
+        navigation.navigate('Login')
     }
-
-    function onFooterResLinkPress() {
-      navigation.navigate('Reset Password')
-  }
 
     async function onLoginPress() {
       try {
         setError('')
         setIsLoading(true)
-        await logIn(email, password)
-          .then((res) => {
-            const uid = res.user.uid
-            db.collection('users')
-            .doc(uid)
-                .get()
-                .then(firestoreDocument => {
-                    if (!firestoreDocument.exists) {
-                        alert("User does not exist anymore.")
-                        return;
-                    }
-                    navigation.navigate('Home')
-                })
-                .catch(err => {
-                    alert(err)
-                });
-          })
-        .catch((err) => {
-          setError(""+ err +"")
-        })
+        await resetPassword(email)
+        setMessage('Check your inbox for further instructions')
       } catch {
-        setError('Failed to log in')
+        setError('Failed to reset password')
       }
       setIsLoading(false)
     }
 
-    function failureAlertMessage(error) {
-      return failureAlert(error)
-    }
+    function successAlertMessage(message) {
+        return successAlert(message)
+      }
+  
+      function failureAlertMessage(error) {
+        return failureAlert(error)
+      }
 
     function pageLoader() {
       setTimeout(() => {
@@ -93,16 +76,24 @@ export default function LoginScreen({navigation}) {
                   onPress={() => navigation.navigate('Home')}
                 />
               </View>
+              <FormHeadingFontContainer>
+                <FormHeadingFont>Password Reset</FormHeadingFont>
+              </FormHeadingFontContainer>
               <KeyboardAwareScrollView
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always"
               >
               <View>
-                {error !== ''
-                  ? failureAlertMessage(error)
-                  : <View></View>
+                {message !== ''
+                    ? successAlertMessage(message)
+                    : <View>
+                    </View>
                 }
-              </View>
+                {error !== ''
+                    ? failureAlertMessage(error)
+                    : <View></View>
+                }
+                </View>
               <CustomInputField
                   placeholder='E-mail'
                   placeholderTextColor={manualColorSet().backgroundColor}
@@ -112,25 +103,16 @@ export default function LoginScreen({navigation}) {
                   underlineColorAndroid="transparent"
                   autoCapitalize="none"
               />
-              <CustomInputField
-                  placeholderTextColor={manualColorSet().backgroundColor}
-                  secureTextEntry
-                  placeholder='Password'
-                  onChangeText={(text) => setPassword(text)}
-                  value={password}
-                  color={manualColorSet().backgroundColor}
-                  underlineColorAndroid="transparent"
-                  autoCapitalize="none"
-              />
               <TouchableButton
                   onPress={() => onLoginPress()}>
-                  <TouchableButtonFont>Log in</TouchableButtonFont>
+                  <TouchableButtonFont>Reset Password</TouchableButtonFont>
               </TouchableButton>
               <FooterView>
-                  <FooterFont>Forgot Password? <FooterLink onPress={onFooterResLinkPress}>Reset Password</FooterLink></FooterFont>
-              </FooterView>
-              <FooterView>
-                  <FooterFont>Don't have an account? <FooterLink onPress={onFooterRegsLinkPress}>Sign up</FooterLink></FooterFont>
+                  <FooterFont>
+                    <FooterLink onPress={onFooterLinkPress}>
+                        Log In
+                    </FooterLink>
+                  </FooterFont>
               </FooterView>
             </KeyboardAwareScrollView>
           </View>

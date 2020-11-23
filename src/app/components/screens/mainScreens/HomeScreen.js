@@ -8,14 +8,14 @@ import { // App Styling
   } from '../../../../../assets/styles/authScreensStyling'
 import { manualColorSet, loadingScreen } from '../authScreens/loadingScreen' //Loader
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}) {
     const { currentUser, logOut } = useAuth()
     const [error, setError] = useState('')
 
     function onUpdateUser() {
-
+        navigation.navigate('Update User')
     }
-
+    
     async function onHandleLogout() {
         setError('')
         try {
@@ -35,7 +35,7 @@ export default function HomeScreen() {
                         <Text>{JSON.stringify(currentUser)}</Text>
                         <TouchableButton 
                             onPress={() => onUpdateUser()}>
-                            <TouchableButtonFont>Update Usert</TouchableButtonFont>
+                            <TouchableButtonFont>Update User</TouchableButtonFont>
                         </TouchableButton>
                         <TouchableButton 
                             onPress={() => onHandleLogout()}>

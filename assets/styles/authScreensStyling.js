@@ -6,6 +6,56 @@ import {
     currentTheme
 } from './globalTheme';
 
+export const FormHeadingFontContainer = styled(View) `
+    justifyContent: center; 
+    alignItems: center;
+    margin: 30px;
+`;
+
+export const FormHeadingFont = styled(Text) `
+    color: ${currentTheme.primaryFontColor};
+    fontSize: 30px;
+    fontFamily: 'SpartanBold';
+`;
+
+export const CustomSuccessAlert = styled(View) `
+    height: 80px;
+    borderRadius: 5px;
+    overflow: hidden;
+    justifyContent: center;
+    backgroundColor: ${currentTheme.successAlertColor};
+    marginTop: 10px;
+    marginBottom: 10px;
+    marginLeft: 30px;
+    marginRight: 30px;
+    paddingLeft: 16px;
+`;
+
+export const CustomSuccessAlertFont = styled(Text) `
+    color: ${currentTheme.successAlertFont};
+    fontSize: 15px;
+    fontFamily: 'SpartanBold';
+`;
+
+export const CustomFailureAlert = styled(View) `
+    height: 80px;
+    borderRadius: 5px;
+    overflow: hidden;
+    justifyContent: center;
+    backgroundColor: ${currentTheme.failureAlertColor};
+    marginTop: 10px;
+    marginBottom: 10px;
+    marginLeft: 30px;
+    marginRight: 30px;
+    paddingLeft: 16px;
+`;
+
+export const CustomFailureAlertFont = styled(Text) `
+    color: ${currentTheme.failureAlertFont};
+    fontSize: 15px;
+    fontFamily: 'SpartanBold';
+`;
+
 /* Login Screen */
 /*---------------------------------------*/
 export const CustomInputField = styled(TextInput) `

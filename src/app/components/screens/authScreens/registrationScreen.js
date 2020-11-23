@@ -13,16 +13,17 @@ import { // App Styling
   FooterLink
 } from '../../../../../assets/styles/authScreensStyling'
 //FontAwesome
-import { FontAwesomeIcon, faTimes } from './fontAwesomeIcons'
+import { FontAwesomeIcon, faTimes } from '../index'
 
 export default function RegistrationScreen({navigation}) {
-  const { signUp, currentUser } = useAuth()
+  const { signUp, currentUser, failureAlert } = useAuth()
   const db = firebase.firestore()
   const [isLoading, setIsLoading] = useState(true)
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const appIcon = '../../../../../assets/images/icon.png'
 
@@ -58,12 +59,16 @@ export default function RegistrationScreen({navigation}) {
               });
         })
         .catch((err) => {
-            alert(err)
+          setError(""+ err +"")
         })
       } catch {
         setError('Failed to create an account')
       }
       setIsLoading(false)
+    }
+
+    function failureAlertMessage(error) {
+      return failureAlert(error)
     }
 
     function pageLoader() {
@@ -93,7 +98,12 @@ export default function RegistrationScreen({navigation}) {
                 style={{ flex: 1, width: '100%' }}
                 keyboardShouldPersistTaps="always"
               >
-                <Text>{error}</Text>
+                <View>
+                  {error !== ''
+                    ? failureAlertMessage(error)
+                    : <View></View>
+                  }
+                </View>
                 <CustomInputField
                     placeholder='Full Name'
                     placeholderTextColor={manualColorSet().backgroundColor}

@@ -19,21 +19,39 @@ export function AuthProvider({ children }) {
     const [notLoggedInCurrentUser, setNotLoggedInCurrentUser ] = useState()
     console.log(currentUser)
     const [isLoading, setIsLoading] = useState(true)
+    const auth = firebase.auth()
+    const db = firebase.firestore()
 
     function signUp(email, password) {
-      return firebase.auth().createUserWithEmailAndPassword(email, password)
+      return auth.createUserWithEmailAndPassword(email, password)
+    }
+
+    function deleteAccountAuth() {
+        return auth.currentUser.delete().then(() => {
+            navigation.navigate('Home')
+          }).catch((err) => {
+            setError(""+ err +"")
+          });
+    }
+
+    function deleteAccountDb(userId) {
+        return db.collection("users").doc(userId).delete().then(() => {
+            console.log("User successfully deleted!")
+        }).catch((err) => {
+          setError(""+ err +"")
+        });
     }
 
     function logIn(email, password) {
-        return firebase.auth().signInWithEmailAndPassword(email, password)
+        return auth.signInWithEmailAndPassword(email, password)
     }
 
     function logOut() {
-        return firebase.auth().signOut()
+        return auth.signOut()
     }
 
     function resetPassword(email) {
-        return firebase.auth().sendPasswordResetEmail(email)
+        return auth.sendPasswordResetEmail(email)
     }
 
     function updateEmail(email) {
@@ -57,7 +75,7 @@ export function AuthProvider({ children }) {
     }
 
     useEffect(() => {
-        const unsubcribe = firebase.auth().onAuthStateChanged(user => {
+        const unsubcribe = auth.onAuthStateChanged(user => {
             setCurrentUser(user)
             setIsLoading(false)
         })
@@ -66,8 +84,11 @@ export function AuthProvider({ children }) {
     }, [])
 
     const value = {
+        db,
         currentUser,
         signUp,
+        deleteAccountAuth,
+        deleteAccountDb,
         logIn,
         logOut,
         resetPassword,

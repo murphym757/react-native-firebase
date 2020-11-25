@@ -17,15 +17,16 @@ import { manualColorSet, loadingScreen } from '../authScreens/loadingScreen' //L
 import { FontAwesomeIcon, faTimes } from '../index'
 
 export default function UpdateUserScreen({navigation}) {
-    const { currentUser, updateEmail, updatePassword, successAlert, failureAlert } = useAuth()
+    const { currentUser, deleteAccountAuth, deleteAccountDb, updateEmail, updatePassword, successAlert, failureAlert } = useAuth()
     const db = firebase.firestore()
     const [ isLoading, setIsLoading] = useState(true)
-    const [email, setEmail] = useState('')
+    const [email, setEmail] = useState("" + currentUser.email +"")
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [userId, setUserId] = useState("" + currentUser.uid +"")
     const [message, setMessage] = useState('')
     const [error, setError] = useState('')
-
+  console.log(email)
     function cancelUpdate() {
         navigation.navigate('Home')
     }
@@ -40,34 +41,51 @@ export default function UpdateUserScreen({navigation}) {
         setIsLoading(true)
         setError("")
         if (email !== currentUser.email) {
-            promises.push(updateEmail(email))
+          promises.push(updateEmail(email))
         }
-        if (email == "" && password !== '') {
-            promises.push(updatePassword(password))
-        }
-        if (email == "") {
-            navigation.navigate('Home')
+        if (password !== '') {
+          promises.push(updatePassword(password))
         }
   
         Promise.all(promises)
         .then(() =>{
-            navigation.navigate('Home')
+          navigation.navigate('Home')
         })
-        .catch(() => {
-            setError("Failed to update account")
-          })
+        .catch((err) => {
+          setError(""+ err +"")
+        })
         .finally(() => {
-            setLoading(false)
+          setIsLoading(false)
         })
       }
+
+    function onDeleteAccountPress() {
+      const promises =[]
+      setIsLoading(true)
+      setError("")
+      promises.push(deleteAccountAuth())
+      promises.push(deleteAccountDb(userId))
+      Promise.all(promises)
+        .then(() =>{
+          navigation.navigate('Login')
+        })
+        .catch((err) => {
+          setError(""+ err +"")
+        })
+        .finally(() => {
+          setIsLoading(false)
+        })
+    }
+
+    
 
     function successAlertMessage(message) {
         return successAlert(message)
       }
   
-      function failureAlertMessage(error) {
-        return failureAlert(error)
-      }
+    function failureAlertMessage(error) {
+      return failureAlert(error)
+    }
 
     function pageLoader() {
       setTimeout(() => {
@@ -107,7 +125,7 @@ export default function UpdateUserScreen({navigation}) {
                     placeholderTextColor={manualColorSet().backgroundColor}
                     onChangeText={(text) => setEmail(text)}
                     required
-                    defaultValue={currentUser.email}
+                    value={email}
                     color={manualColorSet().backgroundColor}
                     underlineColorAndroid="transparent"
                     autoCapitalize="none"
@@ -136,6 +154,11 @@ export default function UpdateUserScreen({navigation}) {
                     disabled={isLoading}
                     onPress={() => onRegisterPress()}>
                     <TouchableButtonFont>Update</TouchableButtonFont>
+                </TouchableButton>
+                <TouchableButton style={{backgroundColor: manualColorSet().warningColor }}
+                    disabled={isLoading}
+                    onPress={() => onDeleteAccountPress()}>
+                    <TouchableButtonFont>Delete</TouchableButtonFont>
                 </TouchableButton>
                 <FooterView>
                     <FooterFont><FooterLink onPress={cancelUpdate}>Cancel</FooterLink></FooterFont>

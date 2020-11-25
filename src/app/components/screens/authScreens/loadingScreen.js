@@ -5,11 +5,13 @@ import LottieView from 'lottie-react-native' //Loader
 export function manualColorSet() {
     const day = {
       fontColor: 'rgb(31, 37, 41)',
-      backgroundColor: 'rgb(224, 218, 214)'
+      backgroundColor: 'rgb(224, 218, 214)',
+      warningColor: 'rgb(103, 162, 162)' 
     }
     const night = {
       fontColor: 'rgb(224, 218, 214)',
-      backgroundColor: 'rgb(31, 37, 41)'
+      backgroundColor: 'rgb(31, 37, 41)',
+      warningColor: 'rgb(103, 162, 162)' 
     }
     let currentTime = new Date();
     let time = currentTime.getHours();

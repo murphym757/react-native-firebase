@@ -9,8 +9,17 @@ import {
     FIREBASE_PROJECT_ID,
     FIREBASE_STORAGE_BUCKET,
     FIREBASE_MESSAGING_SENDER_ID,
-    FIREBASE_APP_ID
+    FIREBASE_APP_ID,
+    IGDB_CLIENT_ID,
+    IGDB_CLIENT_SECRET,
+    GIANTBOMB_API_KEY
 } from 'react-native-dotenv'
+
+const gamesConfig = {
+  igdbClientId: IGDB_CLIENT_ID,
+  igdbClientSecret: IGDB_CLIENT_SECRET,
+  giantbombApiKey: GIANTBOMB_API_KEY
+}
 
 const firebaseConfig = {
   apiKey: FIREBASE_API_KEY,
@@ -26,4 +35,4 @@ if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-export { firebase }
+export { gamesConfig, firebase }

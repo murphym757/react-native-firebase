@@ -21,7 +21,7 @@ export default function HomeScreen({navigation}) {
         try {
             await logOut()
             navigation.navigate('Login')
-        } catch{
+        } catch {
             setError('Failed to log out')
         }
     }

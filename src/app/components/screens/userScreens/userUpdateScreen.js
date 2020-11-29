@@ -17,13 +17,21 @@ import { manualColorSet, loadingScreen } from '../authScreens/loadingScreen' //L
 import { FontAwesomeIcon, faTimes } from '../index'
 
 export default function UpdateUserScreen({navigation}) {
-    const { currentUser, deleteAccountAuth, deleteAccountDb, updateEmail, updatePassword, successAlert, failureAlert } = useAuth()
+    const { 
+      currentUser, 
+      deleteAccountAuth, 
+      deleteAccountDb, 
+      updateEmail, 
+      updatePassword, 
+      successAlert, 
+      failureAlert
+    } = useAuth()
     const db = firebase.firestore()
     const [ isLoading, setIsLoading] = useState(true)
-    const [email, setEmail] = useState("" + currentUser.email +"")
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
-    const [userId, setUserId] = useState("" + currentUser.uid +"")
+    const [userId, setUserId] = useState('')
     const [message, setMessage] = useState('')
     const [error, setError] = useState('')
   console.log(email)
@@ -46,7 +54,7 @@ export default function UpdateUserScreen({navigation}) {
         if (password !== '') {
           promises.push(updatePassword(password))
         }
-  
+
         Promise.all(promises)
         .then(() =>{
           navigation.navigate('Home')
@@ -94,6 +102,8 @@ export default function UpdateUserScreen({navigation}) {
     }
   
     useEffect(() => {
+      setEmail("" + currentUser.email +"")
+      setUserId("" + currentUser.uid +"")
       pageLoader()
     })
 
